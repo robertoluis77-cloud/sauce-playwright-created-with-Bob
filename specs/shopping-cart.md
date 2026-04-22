@@ -1,4 +1,4 @@
-# Shopping Cart Test Plan
+# Shopping Cart Test Plan for SauceDemo https://www.saucedemo.com/
 
 **Application:** SauceDemo (https://www.saucedemo.com/)  
 **Seed Test:** tests/seed.spec.ts  
