@@ -17,10 +17,390 @@
 
 ## Test Scenarios
 
-### 1. Adding Single Item to Cart
+### Login Tests
 
-**Test ID:** CART-001  
-**Priority:** High  
+#### LOGIN-001: Successful login with standard user
+
+**Priority:** Critical
+**Description:** Verify that a user can successfully log in with valid credentials
+
+**Steps:**
+
+1. Navigate to SauceDemo login page (https://www.saucedemo.com/)
+2. Verify login form is displayed with username, password fields and login button
+3. Verify username field has placeholder "Username"
+4. Verify password field has placeholder "Password"
+5. Verify login button displays "Login" text
+6. Enter username: `standard_user`
+7. Enter password: `secret_sauce`
+8. Click "Login" button
+9. Verify redirect to inventory page (URL contains `inventory.html`)
+10. Verify inventory container is visible
+11. Verify page title shows "Products"
+12. Verify 6 products are displayed
+
+**Expected Results:**
+
+- User successfully logs in
+- Redirected to products/inventory page
+- All products are visible
+
+---
+
+#### LOGIN-002: Failed login with invalid username and password
+
+**Priority:** High
+**Description:** Verify appropriate error message when invalid credentials are provided
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Enter username: `invalid_user`
+3. Enter password: `wrong_password`
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Verify error message: "Username and password do not match any user in this service"
+7. Verify user remains on login page
+
+**Expected Results:**
+
+- Login fails with appropriate error message
+- User remains on login page
+- Error banner is visible
+
+---
+
+#### LOGIN-003: Failed login with locked out user
+
+**Priority:** High
+**Description:** Verify locked out user cannot log in
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Enter username: `locked_out_user`
+3. Enter password: `secret_sauce`
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Verify error message: "Sorry, this user has been locked out."
+7. Verify user remains on login page
+
+**Expected Results:**
+
+- Login fails for locked out user
+- Appropriate error message is displayed
+- User cannot access the application
+
+---
+
+#### LOGIN-004: Failed login with missing username
+
+**Priority:** High
+**Description:** Verify validation error when username is not provided
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Leave username field empty
+3. Enter password: `secret_sauce`
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Verify error message: "Username is required"
+
+**Expected Results:**
+
+- Login fails with validation error
+- Username required message is displayed
+
+---
+
+#### LOGIN-005: Failed login with missing password
+
+**Priority:** High
+**Description:** Verify validation error when password is not provided
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Enter username: `standard_user`
+3. Leave password field empty
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Verify error message: "Password is required"
+
+**Expected Results:**
+
+- Login fails with validation error
+- Password required message is displayed
+
+---
+
+#### LOGIN-006: Failed login with missing username and password
+
+**Priority:** Medium
+**Description:** Verify validation error when both fields are empty
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Leave username field empty
+3. Leave password field empty
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Verify error message: "Username is required"
+
+**Expected Results:**
+
+- Login fails with validation error
+- First validation error (username) is displayed
+
+---
+
+#### LOGIN-007: Session persists across page reload after login
+
+**Priority:** Medium
+**Description:** Verify authenticated session persists after page reload
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Login with username: `standard_user` and password: `secret_sauce`
+3. Verify successful login to inventory page
+4. Reload the page (F5 or browser refresh)
+5. Verify user remains on inventory page
+6. Verify inventory container is still visible
+7. Verify page title still shows "Products"
+
+**Expected Results:**
+
+- Session persists after page reload
+- User remains authenticated
+- Inventory page displays correctly
+
+---
+
+#### LOGIN-008: Authenticated user can log out successfully
+
+**Priority:** High
+**Description:** Verify user can successfully log out
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Login with username: `standard_user` and password: `secret_sauce`
+3. Verify successful login to inventory page
+4. Click "Open Menu" button (hamburger menu)
+5. Verify logout link is visible
+6. Click "Logout" link
+7. Verify redirect to login page
+8. Verify login button is visible
+9. Navigate directly to inventory page (https://www.saucedemo.com/inventory.html)
+10. Verify redirect back to login page
+11. Verify login button is visible
+
+**Expected Results:**
+
+- User successfully logs out
+- Redirected to login page
+- Session is cleared
+- Protected pages redirect to login
+
+---
+
+#### LOGIN-009: Session can be reused in a new page within the same browser context
+
+**Priority:** Medium
+**Description:** Verify session is shared across tabs in same browser context
+
+**Steps:**
+
+1. Open first browser tab/page
+2. Navigate to SauceDemo login page
+3. Login with username: `standard_user` and password: `secret_sauce`
+4. Verify successful login to inventory page
+5. Open second tab/page in same browser context
+6. Navigate to inventory page (https://www.saucedemo.com/inventory.html)
+7. Verify inventory page loads without requiring login
+8. Verify inventory container is visible
+9. Verify page title shows "Products"
+
+**Expected Results:**
+
+- Session is shared across tabs in same context
+- No additional login required in new tab
+- Authenticated pages accessible in both tabs
+
+---
+
+#### LOGIN-010: Concurrent login attempts succeed in isolated browser contexts
+
+**Priority:** Low
+**Description:** Verify multiple users can log in simultaneously in isolated contexts
+
+**Steps:**
+
+1. Create first isolated browser context
+2. Create second isolated browser context
+3. In first context: Navigate to login page
+4. In second context: Navigate to login page
+5. In first context: Login with `standard_user` and `secret_sauce`
+6. In second context: Login with `problem_user` and `secret_sauce`
+7. Verify both contexts successfully authenticate
+8. Verify first context shows inventory page
+9. Verify second context shows inventory page
+
+**Expected Results:**
+
+- Both login attempts succeed
+- Sessions are isolated between contexts
+- Both users can access inventory page
+
+---
+
+#### LOGIN-011: Error banner can be dismissed after a failed login attempt
+
+**Priority:** Low
+**Description:** Verify error message can be dismissed
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Enter username: `invalid_user`
+3. Enter password: `wrong_password`
+4. Click "Login" button
+5. Verify error banner is displayed
+6. Click the error dismiss button (X button)
+7. Verify error banner is no longer visible
+
+**Expected Results:**
+
+- Error banner can be dismissed
+- Error message disappears after clicking dismiss button
+
+---
+
+#### LOGIN-012: Password field masks entered characters
+
+**Priority:** Medium
+**Description:** Verify password field uses secure input type
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Verify password field has `type="password"` attribute
+3. Enter password: `secret_sauce`
+4. Verify password field value is stored
+5. Verify password field still has `type="password"` attribute
+6. Verify characters are masked (not visible as plain text)
+
+**Expected Results:**
+
+- Password field uses secure input type
+- Characters are masked
+- Password value is stored correctly
+
+---
+
+#### LOGIN-013: Session expires after clearing storage and revisiting a protected page
+
+**Priority:** Medium
+**Description:** Verify session expires when storage is cleared
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Login with username: `standard_user` and password: `secret_sauce`
+3. Verify successful login to inventory page
+4. Clear browser cookies
+5. Clear localStorage
+6. Clear sessionStorage
+7. Navigate to inventory page (https://www.saucedemo.com/inventory.html)
+8. Verify redirect to login page
+9. Verify login button is visible
+
+**Expected Results:**
+
+- Session expires after clearing storage
+- User redirected to login page
+- Protected pages require re-authentication
+
+---
+
+#### LOGIN-014: Direct navigation to inventory requires authentication
+
+**Priority:** High
+**Description:** Verify unauthenticated users cannot access protected pages
+
+**Steps:**
+
+1. Open browser without any existing session
+2. Navigate directly to inventory page (https://www.saucedemo.com/inventory.html)
+3. Verify redirect to login page
+4. Verify login button is visible
+5. Verify error message: "You can only access '/inventory.html' when you are logged in."
+
+**Expected Results:**
+
+- Unauthenticated access is blocked
+- User redirected to login page
+- Appropriate error message displayed
+
+---
+
+#### LOGIN-015: Password reset, MFA, SSO, and token refresh flows are not exposed in the UI
+
+**Priority:** Low
+**Description:** Verify advanced authentication features are not present
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Verify no "Forgot Password" link is present
+3. Verify no OAuth/SSO login options are present
+4. Verify no MFA/verification code fields are present
+5. Login with username: `standard_user` and password: `secret_sauce`
+6. Verify no token refresh or reauthenticate buttons are present
+
+**Expected Results:**
+
+- No password reset functionality
+- No SSO/OAuth options
+- No MFA prompts
+- No token refresh UI
+
+---
+
+#### LOGIN-016: Repeated invalid login attempts do not trigger rate limiting in the current application
+
+**Priority:** Low
+**Description:** Verify no rate limiting on failed login attempts
+
+**Steps:**
+
+1. Navigate to SauceDemo login page
+2. Attempt login with invalid credentials 5 times:
+   - Attempt 1: `invalid_user` / `wrong_password_0`
+   - Attempt 2: `invalid_user` / `wrong_password_1`
+   - Attempt 3: `invalid_user` / `wrong_password_2`
+   - Attempt 4: `invalid_user` / `wrong_password_3`
+   - Attempt 5: `invalid_user` / `wrong_password_4`
+3. Verify each attempt shows standard error message
+4. Verify no rate limit or temporary lock message appears
+5. Verify no "too many requests" or "try again later" message
+
+**Expected Results:**
+
+- No rate limiting implemented
+- All attempts fail with standard error
+- No temporary account lock
+
+---
+
+### Shopping Cart Tests
+
+#### CART-001: Adding Single Item to Cart
+
+**Priority:** High
 **Description:** Verify that a single item can be added to the shopping cart
 
 **Steps:**
@@ -43,10 +423,9 @@
 
 ---
 
-### 2. Adding Multiple Items to Cart
+#### CART-002: Adding Multiple Items to Cart
 
-**Test ID:** CART-002  
-**Priority:** High  
+**Priority:** High
 **Description:** Verify that multiple items can be added to the shopping cart
 
 **Steps:**
@@ -71,10 +450,9 @@
 
 ---
 
-### 3. Removing Item from Cart (Product Page)
+#### CART-003: Removing Item from Cart (Product Page)
 
-**Test ID:** CART-003  
-**Priority:** High  
+**Priority:** High
 **Description:** Verify that an item can be removed from cart via the products page
 
 **Steps:**
@@ -97,10 +475,9 @@
 
 ---
 
-### 4. Removing Item from Cart (Cart Page)
+#### CART-004: Removing Item from Cart (Cart Page)
 
-**Test ID:** CART-004  
-**Priority:** High  
+**Priority:** High
 **Description:** Verify that an item can be removed from the cart page
 
 **Steps:**
@@ -123,10 +500,9 @@
 
 ---
 
-### 5. Cart Badge Counter Updates
+#### CART-005: Cart Badge Counter Updates
 
-**Test ID:** CART-005  
-**Priority:** High  
+**Priority:** High
 **Description:** Verify cart badge counter updates correctly as items are added and removed
 
 **Steps:**
@@ -149,10 +525,9 @@
 
 ---
 
-### 6. Cart Persistence Across Pages
+#### CART-006: Cart Persistence Across Pages
 
-**Test ID:** CART-006  
-**Priority:** Medium  
+**Priority:** Medium
 **Description:** Verify cart contents persist when navigating between pages
 
 **Steps:**
@@ -179,10 +554,9 @@
 
 ---
 
-### 7. Empty Cart State
+#### CART-007: Empty Cart State
 
-**Test ID:** CART-007  
-**Priority:** Medium  
+**Priority:** Medium
 **Description:** Verify the empty cart state displays correctly
 
 **Steps:**
@@ -205,10 +579,9 @@
 
 ---
 
-### 8. Add All Products to Cart
+#### CART-008: Add All Products to Cart
 
-**Test ID:** CART-008  
-**Priority:** Medium  
+**Priority:** Medium
 **Description:** Verify all 6 products can be added to cart
 
 **Steps:**
@@ -234,10 +607,9 @@
 
 ---
 
-### 9. Remove All Items from Cart
+#### CART-009: Remove All Items from Cart
 
-**Test ID:** CART-009  
-**Priority:** Medium  
+**Priority:** Medium
 **Description:** Verify all items can be removed from cart
 
 **Steps:**
@@ -260,10 +632,9 @@
 
 ---
 
-### 10. Cart Badge Visibility
+#### CART-010: Cart Badge Visibility
 
-**Test ID:** CART-010  
-**Priority:** Low  
+**Priority:** Low
 **Description:** Verify cart badge visibility behavior
 
 **Steps:**
